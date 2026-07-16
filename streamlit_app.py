@@ -135,9 +135,20 @@ if "current" not in st.session_state:
     st.session_state.total = 0
     st.session_state.feedback = ""
     st.session_state.selected = None
+    st.session_state.submitted = False
+    st.session_state.question_id = 0
 
 if st.session_state.current is None:
     st.session_state.current = random.choice(QUESTIONS)
+    st.session_state.question_id += 1
+
+
+def start_new_question():
+    st.session_state.current = random.choice(QUESTIONS)
+    st.session_state.selected = None
+    st.session_state.feedback = ""
+    st.session_state.submitted = False
+    st.session_state.question_id += 1
 
 st.markdown("**게임 방법**")
 st.write(
@@ -155,10 +166,16 @@ st.divider()
 st.subheader("문제")
 st.write(f"**{st.session_state.current['question']}**")
 
-selected = st.radio("보기 중에서 선택하세요", st.session_state.current["choices"], index=0)
+selected = st.radio(
+    "보기 중에서 선택하세요",
+    st.session_state.current["choices"],
+    key=f"quiz_radio_{st.session_state.question_id}",
+    index=None,
+)
 
-if selected != st.session_state.selected:
+if not st.session_state.submitted and selected is not None and selected != st.session_state.selected:
     st.session_state.selected = selected
+    st.session_state.submitted = True
     st.session_state.total += 1
     if st.session_state.selected == st.session_state.current["answer"]:
         st.session_state.score += 1
@@ -167,9 +184,7 @@ if selected != st.session_state.selected:
         st.session_state.feedback = f"❌ 아쉽습니다. 정답은 `{st.session_state.current['answer']}` 입니다."
 
 if st.button("다음 문제"):
-    st.session_state.current = random.choice(QUESTIONS)
-    st.session_state.selected = None
-    st.session_state.feedback = ""
+    start_new_question()
 
 if st.session_state.feedback:
     st.info(st.session_state.feedback)
