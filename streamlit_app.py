@@ -1,121 +1,102 @@
 import random
 import streamlit as st
 
-st.set_page_config(page_title="중학생 영어 단어 게임", page_icon="📚", layout="centered")
+st.set_page_config(page_title="에이핑크 팬 인증 게임", page_icon="💗", layout="centered")
 
-st.title("📘 중학생 영어 단어 게임")
-st.write("중학생 수준의 영어 단어를 재미있게 공부해 보세요. 문제를 풀고 `다음 문제` 버튼을 눌러 보세요.")
+st.title("💗 에이핑크 팬 인증 게임")
+st.write("에이핑크를 얼마나 잘 아는지 확인하는 팬 인증 게임입니다. 문제를 풀고 `정답 확인`을 눌러보세요!")
 
-WORDS = [
-    {"english": "apple", "korean": "사과"},
-    {"english": "school", "korean": "학교"},
-    {"english": "family", "korean": "가족"},
-    {"english": "friend", "korean": "친구"},
-    {"english": "book", "korean": "책"},
-    {"english": "teacher", "korean": "선생님"},
-    {"english": "class", "korean": "수업"},
-    {"english": "music", "korean": "음악"},
-    {"english": "dance", "korean": "춤"},
-    {"english": "happy", "korean": "행복한"},
-    {"english": "summer", "korean": "여름"},
-    {"english": "winter", "korean": "겨울"},
-    {"english": "water", "korean": "물"},
-    {"english": "apple", "korean": "사과"},
-    {"english": "sports", "korean": "운동"},
-    {"english": "movie", "korean": "영화"},
-    {"english": "travel", "korean": "여행"},
-    {"english": "computer", "korean": "컴퓨터"},
-    {"english": "animal", "korean": "동물"},
-    {"english": "happy", "korean": "행복한"},
-    {"english": "family", "korean": "가족"},
-    {"english": "study", "korean": "공부하다"},
-    {"english": "mountain", "korean": "산"},
-    {"english": "river", "korean": "강"},
-    {"english": "ocean", "korean": "바다"},
-    {"english": "food", "korean": "음식"},
-    {"english": "market", "korean": "시장"},
-    {"english": "picture", "korean": "그림"},
-    {"english": "happy", "korean": "행복한"},
+QUESTIONS = [
+    {
+        "question": "에이핑크 데뷔 연도는 언제일까요?",
+        "choices": ["2010년", "2011년", "2012년", "2013년"],
+        "answer": "2011년",
+    },
+    {
+        "question": "에이핑크 리더의 이름은 무엇일까요?",
+        "choices": ["보미", "정은지", "윤보미", "손나은"],
+        "answer": "윤보미",
+    },
+    {
+        "question": "다음 중 에이핑크의 곡이 아닌 것은?",
+        "choices": ["Mr. Chu", "NoNoNo", "LUV", "Lion Heart"],
+        "answer": "Lion Heart",
+    },
+    {
+        "question": "에이핑크 멤버가 아닌 사람은 누구일까요?",
+        "choices": ["박초롱", "김남주", "윤보미", "아이유"],
+        "answer": "아이유",
+    },
+    {
+        "question": "에이핑크의 공식 팬클럽 이름은 무엇일까요?",
+        "choices": ["Pink Panda", "Pink Bubble", "Pink Candy", "Pink Star"],
+        "answer": "Pink Panda",
+    },
+    {
+        "question": "다음 중 에이핑크의 대표 색깔은 무엇인가요?",
+        "choices": ["핑크", "푸른색", "노란색", "초록색"],
+        "answer": "핑크",
+    },
+    {
+        "question": "에이핑크 멤버 중 '에이핑크의 맏언니'로 불리는 사람은?",
+        "choices": ["홍진영", "박초롱", "정은지", "남주"],
+        "answer": "박초롱",
+    },
+    {
+        "question": "에이핑크의 데뷔 앨범 제목은 무엇인가요?",
+        "choices": ["Seven Springs of Apink", "Pink Blossom", "Remember", "Secret Garden"],
+        "answer": "Seven Springs of Apink",
+    },
 ]
 
-if "question" not in st.session_state:
-    st.session_state.question = None
-    st.session_state.correct_answer = None
-    st.session_state.options = []
-    st.session_state.mode = "영단어 → 뜻"
+if "current" not in st.session_state:
+    st.session_state.current = None
+    st.session_state.selected = None
     st.session_state.score = 0
     st.session_state.total = 0
     st.session_state.feedback = ""
 
-mode = st.radio("게임 모드 선택", ["영단어 → 뜻", "뜻 → 영단어"], index=0)
+if st.session_state.current is None:
+    st.session_state.current = random.choice(QUESTIONS)
 
-if mode != st.session_state.mode:
-    st.session_state.mode = mode
-    st.session_state.question = None
-    st.session_state.feedback = ""
+st.markdown("**게임 방법**")
+st.write(
+    "1. 보기를 보고 정답을 선택합니다.\n"
+    "2. `정답 확인`을 누르면 결과를 확인합니다.\n"
+    "3. `다음 문제`로 새로운 문제를 풀어보세요."
+)
 
 col1, col2 = st.columns([2, 1])
-with col1:
-    st.markdown("**게임 방법**")
-    st.write(
-        "1. 문제를 보고 네 가지 보기 중에서 정답을 선택합니다.\n"
-        "2. `정답 확인` 버튼을 누르면 맞았는지 확인합니다.\n"
-        "3. `다음 문제` 버튼으로 새로운 문제를 풀어보세요."
-    )
 with col2:
-    st.metric("정답", st.session_state.score, delta=f"/ {st.session_state.total}")
+    st.metric("맞은 문제", st.session_state.score, delta=f"/ {st.session_state.total}")
 
 st.divider()
 
-if st.session_state.question is None:
-    st.session_state.question = random.choice(WORDS)
-
-def make_options(question, mode):
-    items = WORDS.copy()
-    random.shuffle(items)
-    if mode == "영단어 → 뜻":
-        correct = question["korean"]
-        choices = [item["korean"] for item in items if item["korean"] != correct][:3]
-    else:
-        correct = question["english"]
-        choices = [item["english"] for item in items if item["english"] != correct][:3]
-    choices.append(correct)
-    random.shuffle(choices)
-    return correct, choices
-
-if not st.session_state.options:
-    st.session_state.correct_answer, st.session_state.options = make_options(st.session_state.question, st.session_state.mode)
-
 st.subheader("문제")
-if st.session_state.mode == "영단어 → 뜻":
-    st.write(f"**{st.session_state.question['english']}** 의 뜻은 무엇일까요?")
-else:
-    st.write(f"**{st.session_state.question['korean']}** 에 해당하는 영어 단어는 무엇일까요?")
+st.write(f"**{st.session_state.current['question']}**")
 
-answer = st.radio("보기 중에서 선택하세요", st.session_state.options)
-solve = st.button("정답 확인")
-next_q = st.button("다음 문제")
+st.session_state.selected = st.radio("보기 중에서 선택하세요", st.session_state.current["choices"], index=0)
 
-if solve:
-    st.session_state.total += 1
-    if answer == st.session_state.correct_answer:
-        st.session_state.score += 1
-        st.session_state.feedback = "🎉 정답입니다! 잘했어요."
-    else:
-        st.session_state.feedback = f"❌ 틀렸어요. 정답은 `{st.session_state.correct_answer}` 입니다."
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("정답 확인"):
+        st.session_state.total += 1
+        if st.session_state.selected == st.session_state.current["answer"]:
+            st.session_state.score += 1
+            st.session_state.feedback = "🎉 정답입니다! 당신은 진짜 에이핑크 팬이에요."
+        else:
+            st.session_state.feedback = f"❌ 아쉽습니다. 정답은 `{st.session_state.current['answer']}` 입니다."
+with col2:
+    if st.button("다음 문제"):
+        st.session_state.current = random.choice(QUESTIONS)
+        st.session_state.feedback = ""
 
 if st.session_state.feedback:
-    st.success(st.session_state.feedback)
-
-if next_q:
-    st.session_state.question = random.choice(WORDS)
-    st.session_state.correct_answer, st.session_state.options = make_options(st.session_state.question, st.session_state.mode)
-    st.session_state.feedback = ""
+    st.info(st.session_state.feedback)
 
 st.divider()
 
 st.write("---")
-st.write("### 단어 목록 예시")
-example_words = random.sample(WORDS, min(6, len(WORDS)))
-for item in example_words:
-    st.write(f"- {item['english']} : {item['korean']}")
+st.write("### 에이핑크 팬 인증 퀴즈에 도전해보세요!")
+st.write("- 데뷔 연도, 멤버, 팬클럽 이름 등 기본 상식을 테스트합니다.")
+st.write("- 더 많은 문제를 추가하면 팬 인증 난이도를 높일 수 있어요.")
