@@ -13,6 +13,16 @@ QUESTIONS = [
         "answer": "2011년",
     },
     {
+        "question": "에이핑크 정은지의 생일은 언제일까요?",
+        "choices": ["1990년 8월 18일", "1991년 1월 18일", "1992년 9월 18일", "1993년 3월 18일"],
+        "answer": "1993년 8월 18일",
+    },
+    {
+        "question": "에이핑크의 데뷔 날짜는 언제일까요?",
+        "choices": ["2011년 4월 19일", "2011년 5월 21일", "2012년 3월 17일", "2010년 5월 26일"],
+        "answer": "2011년 4월 19일",
+    },
+    {
         "question": "에이핑크 리더의 이름은 무엇일까요?",
         "choices": ["보미", "정은지", "윤보미", "손나은"],
         "answer": "윤보미",
@@ -43,9 +53,34 @@ QUESTIONS = [
         "answer": "박초롱",
     },
     {
-        "question": "에이핑크의 데뷔 앨범 제목은 무엇인가요?",
-        "choices": ["Seven Springs of Apink", "Pink Blossom", "Remember", "Secret Garden"],
+        "question": "에이핑크 정은지가 출연하지 않은 작품은?",
+        "choices": ["응답하라 1997", "당신이 잠든 사이에", "마이 디어 프렌즈", "나의 아저씨"],
+        "answer": "나의 아저씨",
+    },
+    {
+        "question": "에이핑크 정은지가 OST를 부른 드라마는?",
+        "choices": ["고교처세왕", "천일의 약속", "혼술남녀", "푸른 바다의 전설"],
+        "answer": "고교처세왕",
+    },
+    {
+        "question": "에이핑크가 데뷔할 때 발표한 첫 번째 앨범 이름은?",
+        "choices": ["Seven Springs of Apink", "Pink Blossom", "Secret Garden", "Pink Memory"],
         "answer": "Seven Springs of Apink",
+    },
+    {
+        "question": "에이핑크의 데뷔 타이틀 곡은 무엇인가요?",
+        "choices": ["몰라요", "NoNoNo", "Mr. Chu", "LUV"],
+        "answer": "몰라요",
+    },
+    {
+        "question": "에이핑크 정은지가 솔로로 발표한 곡은 무엇일까요?",
+        "choices": ["하늘바라기", "러브 레터", "너란 봄", "아마도 그건"],
+        "answer": "하늘바라기",
+    },
+    {
+        "question": "에이핑크의 곡 'NoNoNo'가 수록된 앨범은 무엇일까요?",
+        "choices": ["Pink Blossom", "Secret Garden", "Pink Memory", "Snow Pink"],
+        "answer": "Pink Blossom",
     },
 ]
 
