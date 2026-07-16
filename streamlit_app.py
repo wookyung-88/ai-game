@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="에이핑크 팬 인증 게임", page_icon="💗", layout="centered")
 
 st.title("💗 에이핑크 팬 인증 게임")
-st.write("에이핑크를 얼마나 잘 아는지 확인하는 팬 인증 게임입니다. 문제를 풀고 `정답 확인`을 눌러보세요!")
+st.write("에이핑크를 얼마나 잘 아는지 확인하는 팬 인증 게임입니다. 문제를 풀고 바로 정답 여부를 확인해보세요!")
 
 QUESTIONS = [
     {
@@ -82,14 +82,59 @@ QUESTIONS = [
         "choices": ["Pink Blossom", "Secret Garden", "Pink Memory", "Snow Pink"],
         "answer": "Pink Blossom",
     },
+    {
+        "question": "에이핑크 그룹 이름의 영어 표기는 무엇일까요?",
+        "choices": ["Apink", "A Pink", "Pink A", "A-pink"],
+        "answer": "Apink",
+    },
+    {
+        "question": "에이핑크가 소속된 회사는 어디일까요?",
+        "choices": ["YG 엔터테인먼트", "SM 엔터테인먼트", "플레디스 엔터테인먼트", "JYP 엔터테인먼트"],
+        "answer": "플레디스 엔터테인먼트",
+    },
+    {
+        "question": "에이핑크 멤버 수는 몇 명일까요?",
+        "choices": ["4명", "5명", "6명", "7명"],
+        "answer": "6명",
+    },
+    {
+        "question": "에이핑크 멤버 중 '초롱이'라는 별명을 가진 사람은?",
+        "choices": ["박초롱", "윤보미", "정은지", "오하영"],
+        "answer": "박초롱",
+    },
+    {
+        "question": "에이핑크 멤버 중 '남주'라는 이름이 들어간 사람은?",
+        "choices": ["김남주", "윤보미", "손나은", "정은지"],
+        "answer": "김남주",
+    },
+    {
+        "question": "에이핑크 멤버 중 '하영'이라는 이름이 들어간 사람은?",
+        "choices": ["오하영", "박초롱", "정은지", "김남주"],
+        "answer": "오하영",
+    },
+    {
+        "question": "에이핑크의 팬덤 이름은 무엇일까요?",
+        "choices": ["Pink Panda", "Pink Star", "Pink Berry", "Pink Love"],
+        "answer": "Pink Panda",
+    },
+    {
+        "question": "에이핑크의 공식 그룹 색상은 무엇일까요?",
+        "choices": ["파란색", "초록색", "핑크", "보라색"],
+        "answer": "핑크",
+    },
+    {
+        "question": "에이핑크 멤버 중 '나은'이라는 이름이 들어간 사람은?",
+        "choices": ["손나은", "김남주", "윤보미", "오하영"],
+        "answer": "손나은",
+    },
 ]
 
 if "current" not in st.session_state:
     st.session_state.current = None
-    st.session_state.selected = None
     st.session_state.score = 0
     st.session_state.total = 0
     st.session_state.feedback = ""
+    st.session_state.selected = None
 
 if st.session_state.current is None:
     st.session_state.current = random.choice(QUESTIONS)
@@ -97,7 +142,7 @@ if st.session_state.current is None:
 st.markdown("**게임 방법**")
 st.write(
     "1. 보기를 보고 정답을 선택합니다.\n"
-    "2. `정답 확인`을 누르면 결과를 확인합니다.\n"
+    "2. 선택하면 바로 정답 여부가 나옵니다.\n"
     "3. `다음 문제`로 새로운 문제를 풀어보세요."
 )
 
@@ -110,21 +155,21 @@ st.divider()
 st.subheader("문제")
 st.write(f"**{st.session_state.current['question']}**")
 
-st.session_state.selected = st.radio("보기 중에서 선택하세요", st.session_state.current["choices"], index=0)
+selected = st.radio("보기 중에서 선택하세요", st.session_state.current["choices"], index=0)
 
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("정답 확인"):
-        st.session_state.total += 1
-        if st.session_state.selected == st.session_state.current["answer"]:
-            st.session_state.score += 1
-            st.session_state.feedback = "🎉 정답입니다! 당신은 진짜 에이핑크 팬이에요."
-        else:
-            st.session_state.feedback = f"❌ 아쉽습니다. 정답은 `{st.session_state.current['answer']}` 입니다."
-with col2:
-    if st.button("다음 문제"):
-        st.session_state.current = random.choice(QUESTIONS)
-        st.session_state.feedback = ""
+if selected != st.session_state.selected:
+    st.session_state.selected = selected
+    st.session_state.total += 1
+    if st.session_state.selected == st.session_state.current["answer"]:
+        st.session_state.score += 1
+        st.session_state.feedback = "🎉 정답입니다! 당신은 진짜 에이핑크 팬이에요."
+    else:
+        st.session_state.feedback = f"❌ 아쉽습니다. 정답은 `{st.session_state.current['answer']}` 입니다."
+
+if st.button("다음 문제"):
+    st.session_state.current = random.choice(QUESTIONS)
+    st.session_state.selected = None
+    st.session_state.feedback = ""
 
 if st.session_state.feedback:
     st.info(st.session_state.feedback)
